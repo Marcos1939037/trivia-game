@@ -30,7 +30,7 @@ Embárcate en una emocionante aventura donde asumes el rol de un valiente aventu
 ### Instalación
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/calabozos-y-preguntones.git
+git clone https://github.com/ArnoldoParas/trivia-game.git
 
 # Navegar al directorio
 cd calabozos-y-preguntones
