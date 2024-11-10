@@ -1,12 +1,16 @@
 use crate::components;
 use std::{collections::HashMap, time::{Duration, Instant}};
 use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 const WHITE: Color32 = egui::Color32::WHITE;
 
 pub struct App {
   quiz_items: Vec<QuizItem>,
+  quiz: QuizItem,
+  used_quiz_items: [u8; 40],
+  used_quiz_idx: usize,
   screen: CurrentScreen,
   duration: Duration,
   start_time: Instant,
@@ -43,12 +47,27 @@ struct QuizItem {
   tipo_reactivo: String,
 }
 
+impl Clone for QuizItem {
+  fn clone(&self) -> Self {
+    QuizItem {
+      unidad_tematica: self.unidad_tematica.clone(),
+      pregunta: self.pregunta.clone(),
+      respuestas: self.respuestas.clone(),
+      respuesta_correcta: self.respuesta_correcta.clone(),
+      tipo_reactivo: self.tipo_reactivo.clone()
+    }
+  }
+}
 
 impl App {
   pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
 
     let json_str = std::fs::read_to_string("assets/data/questions.json").unwrap();
     let quiz_items: Vec<QuizItem> = serde_json::from_str(&json_str).unwrap();
+
+    let rng = rand::thread_rng().gen_range(0..quiz_items.len());
+    let quiz = quiz_items[rng].clone();
+    let used_quiz_items: [u8; 40] = [rng as u8; 40];
 
     // for item in &quiz_items {
     //   println!("Pregunta: {}", item.pregunta);
@@ -62,6 +81,9 @@ impl App {
 
     Self {
       quiz_items: quiz_items,
+      quiz: quiz,
+      used_quiz_items: used_quiz_items,
+      used_quiz_idx: 1,
       screen: CurrentScreen::Menu,
       duration: Duration::from_secs(60),
       start_time: Instant::now(),
@@ -81,8 +103,9 @@ impl eframe::App for App {
       CurrentScreen::Ingame => ingame_ui(self, ctx),
       CurrentScreen::Analisis => analisis_ui(self, ctx),
     }
-    self.refresh += 1;
-    println!("{}",self.refresh);
+    println!("{:?}", self.used_quiz_items);
+    // self.refresh += 1;
+    // println!("{}",self.refresh);
     ctx.request_repaint_after(Duration::from_millis(250));
   }
 }
@@ -125,6 +148,24 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     } else {
       app.duration - app.start_time.elapsed()
     };
+
+    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
+      let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
+      app.quiz = app.quiz_items.get(new_quiz)
+          .unwrap()
+          .to_owned();
+
+      
+      app.used_quiz_items[app.used_quiz_idx] = new_quiz as u8;
+      app.used_quiz_idx += 1;
+      app.health.hero_health = 1.0;
+      app.health.enemy_health = 1.0;
+
+      if app.used_quiz_idx >= app.used_quiz_items.len() {
+        app.used_quiz_items = [0; 40];
+        app.used_quiz_idx = 0;
+      }
+    }
 
     TopBottomPanel::top("top_panel_ingame")
     .min_height(15.)
@@ -199,12 +240,9 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
         );
       });
       ui.with_layout(egui::Layout::bottom_up(egui::Align::Center), |ui| {
-        ui.label(egui::RichText::new("Los numeros rectangulares son aceptados?")
+        ui.label(egui::RichText::new(&app.quiz.pregunta)
         .size(30.)
         .color(WHITE));
-        ui.label(egui::RichText::new("a=12 X0=54 C=3 m=6")
-          .size(30.)
-          .color(WHITE));
       });
     });
 }
@@ -214,3 +252,17 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
   todo!()
 }
 
+fn get_unused_quiz_index(app: &App) -> Option<usize> {
+  let available_indices: Vec<usize> = (0..app.quiz_items.len())
+      .filter(|&index| !app.used_quiz_items.contains(&(index as u8)))
+      .collect();
+
+  if available_indices.is_empty() {
+      return None;
+  }
+
+  let mut rng = rand::thread_rng();
+  let random_index = available_indices[rng.gen_range(0..available_indices.len())];
+  
+  Some(random_index)
+}
