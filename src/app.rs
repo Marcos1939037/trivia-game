@@ -1,6 +1,6 @@
 use crate::components;
 use std::{collections::HashMap, time::{Duration, Instant}};
-use egui::{Align, CentralPanel, Color32, Direction, Layout, RichText, SidePanel, TopBottomPanel};
+use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
 use serde::{Deserialize, Serialize};
 
 const WHITE: Color32 = egui::Color32::WHITE;
@@ -93,12 +93,18 @@ fn menu_ui(app: &mut App, ctx: &egui::Context) {
     .resizable(false)
     .show_separator_line(false)
     .show(ctx, |ui| {
-      ui.with_layout(Layout::centered_and_justified(Direction::LeftToRight), |ui| {
-        ui.label(RichText::new("LOGO")
-          .size(60.0)
-          .color(WHITE)
-        );
-      });
+    ui.vertical_centered(|ui| {
+      ui.add(
+        Image::new(egui::include_image!("../assets/img/logo.png"))
+        .max_width(200.0)
+        .max_height(200.0)
+      );
+      ui.label(RichText::new("CALABOZOS Y PREGUNTONES")
+        .family(egui::FontFamily::Name("CustomFont_1".into()))
+        .size(60.0)
+        .color(WHITE)
+      );
+    })
   });
   
   CentralPanel::default().show(ctx, |ui| {
@@ -126,13 +132,16 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     .show_separator_line(false)
     .show(ctx, |ui| {
       ui.horizontal(|ui| {
-          ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
-              ui.label("Unidad tematica 1 - Fundamentos de simulación y modelación");
-              ui.add_space(ui.available_width() - 60.);            
-              if ui.add_sized(egui::vec2(25.0, 10.0), egui::Button::new("☰ Menu")).clicked() {
-                println!("Botón clicado!");
-              }
-          });
+        ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
+          ui.label(
+            RichText::new("Unidad tematica 1 - Fundamentos de simulación y modelación")
+              .size(15.0)
+          );
+          ui.add_space(ui.available_width() - 60.);            
+          if ui.add_sized(egui::vec2(25.0, 10.0), egui::Button::new("☰ Menu")).clicked() {
+            println!("Botón clicado!");
+          }
+        });
       });
       ui.separator();
     });
@@ -153,7 +162,12 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
         ui.add_space(5.);
         ui.vertical_centered(|ui| {
           components::health_bar(ui, app.health.hero_health, false);
-          ui.image(egui::include_image!("../assets/img/hero.png"));
+          ui.add_space(120.0);
+          ui.add(
+            Image::new(egui::include_image!("../assets/img/hero_temp.png"))
+            .max_width(180.0)
+            .max_height(180.0)
+          );
         });
     });
       
@@ -165,7 +179,12 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
         ui.add_space(5.);
         ui.vertical_centered(|ui| {
           components::health_bar(ui, app.health.enemy_health, true);
-          ui.image(egui::include_image!("../assets/img/enemy_1.png"));
+          ui.add_space(150.0);
+          ui.add(
+            Image::new(egui::include_image!("../assets/img/enemy_1_test.png"))
+            .max_width(150.0)
+            .max_height(150.0)
+          );
         });
     });
 
