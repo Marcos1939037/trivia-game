@@ -1,0 +1,72 @@
+[
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "Se refiere al paso en el cual definimos la claridad y exactitud que va a requerir el modelo para producir los resultados deseados",
+      "Respuestas" : {
+          "a": "Colección de Datos", 
+          "b": "Experimentación", 
+          "c": "Formulación del modelo", 
+          "d": "Definición del sistema"
+      },
+      "Respuesta correcta" : "a",
+      "Tipo de reactivo" : "Opción Múltiple"
+
+  },
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "La última fase del ciclo de vida del desarrollo de sistemas es 'Implementación y evaluación del sistema' ",
+      "Respuestas" : {
+          "V": "Verdadero", 
+          "F": "Falso"
+      },
+      "Respuesta correcta" : "V",
+      "Tipo de reactivo" : "Verdadero o Falso"     
+
+  },
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "Es el proceso para generar variables aleatorias no uniformes",
+      "Respuestas" : {
+          "a": "Provisión externa", 
+          "b": "Generación de números rectangulares",
+          "c": "Generación de números aleatorios",
+          "d": "Generación de variables aleatorias"
+      },
+      "Respuesta correcta" : "b",
+      "Tipo de reactivo" : "Opción Múltiple"     
+
+  },
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "A que generador coreresponde la formula: Xn+1 = (aXn + c) mod m",
+      "Respuestas" : {
+          "a": "Generador congruencial multiplicativo", 
+          "b": "Generador de números aleatorios",
+          "c": "Generador de números rectangulares",
+          "d": "Generador congruencial mixto"
+      },
+      "Respuesta correcta" : "d",
+      "Tipo de reactivo" : "Opción Múltiple"     
+  },
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "Efectúe la prueba de promedios para los siguientes números rectangulares: 0.34712 0.99358 0.79750 0.23584 0.81921 0.93394 0.17855 0.19192 0.25276 0.21399",
+      "Respuestas" : {
+          "V": "Los números rectangulares son aceptados", 
+          "F": "Los números rectangulares son rechazados"
+      },
+      "Respuesta correcta" : "F",
+      "Tipo de reactivo" : "Verdadero o Falso"     
+  }
+  ,
+  {
+      "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+      "Pregunta" : "En la prueba de Kolmogorov-Smirnov se toma como valor estadístico a partir de la siguiente fórmula Dn = max|(F(xi)*xi) - xi|",
+      "Respuestas" : {
+          "V": "Verdadero", 
+          "F": "Falso"
+      },
+      "Respuesta correcta" : "F",
+      "Tipo de reactivo" : "Verdadero o Falso"     
+  }
+]
