@@ -164,7 +164,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
           components::health_bar(ui, app.health.hero_health, false);
           ui.add_space(120.0);
           ui.add(
-            Image::new(egui::include_image!("../assets/img/hero_temp.png"))
+            Image::new(egui::include_image!("../assets/img/hero.png"))
             .max_width(180.0)
             .max_height(180.0)
           );
@@ -181,7 +181,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
           components::health_bar(ui, app.health.enemy_health, true);
           ui.add_space(150.0);
           ui.add(
-            Image::new(egui::include_image!("../assets/img/enemy_1_test.png"))
+            Image::new(egui::include_image!("../assets/img/enemy_1.png"))
             .max_width(150.0)
             .max_height(150.0)
           );
