@@ -1,5 +1,10 @@
+use std::time::{Duration, Instant};
+
 use egui::{Color32, RichText, Ui};
+use rand::Rng;
 use crate::app::App;
+
+const WHITE: Color32 = egui::Color32::WHITE;
 
 pub fn health_bar(ui: &mut Ui, health: f32, right_to_left: bool) {
   let (_, rect) = ui.allocate_space(egui::vec2(200.0, 25.0));
@@ -41,23 +46,81 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
   } else {
     12.
   };
-  let correct_ans = &app.quiz.respuesta_correcta;
+  let correct_ans = &app.quiz.respuesta_correcta.to_owned();
+  let answers = app.quiz.respuestas.clone();
   ui.vertical_centered(|ui| {
     ui.add_space(spacing);
-    for (key, answer) in app.quiz.respuestas.iter() {
+    for (key, answer) in answers.iter() {
       if correct_ans == key {
         if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.)).fill(Color32::DARK_GREEN)).clicked() {
-          app.health.enemy_health -= 0.05;
+          app.health.enemy_health -= 0.1;
           app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
+          select_new_quiz(app);
         }
       }else {
         if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.))).clicked() {
-          app.health.hero_health -= 0.05;
+          app.health.hero_health -= 0.1;
           app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
+          select_new_quiz(app);
         }
       }
 
       ui.add_space(spacing);
     }
   });
+}
+
+pub fn timer(ui: &mut Ui, app: &mut App, remaining: Duration) {
+  ui.vertical_centered(|ui| {
+    let minutes = remaining.as_secs() /60;
+    let seconds = remaining.as_secs() % 60;
+
+    if remaining == Duration::from_secs(0) {
+      app.health.hero_health -= 0.1;
+      app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
+      select_new_quiz(app);
+    }
+
+    ui.heading(egui::RichText::new(format!("{:02}:{:02}",minutes,seconds))
+      .size(60.)
+      .color(WHITE)
+    );
+  });
+}
+
+fn select_new_quiz(app: &mut App) {
+  let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
+  app.quiz = app.quiz_items.get(new_quiz)
+    .unwrap()
+    .to_owned();
+
+  app.used_quiz_items[app.used_quiz_idx] = new_quiz as u8;
+  app.used_quiz_idx += 1;
+
+  app.duration = match app.quiz.tipo_reactivo.as_str() {
+    "Opción Múltiple" => Duration::from_secs(31),
+    "Verdadero o Falso" => Duration::from_secs(16),
+    _ => Duration::from_secs(0)
+  };
+  app.start_time = Instant::now();
+
+  if app.used_quiz_idx >= app.used_quiz_items.len() {
+    app.used_quiz_items = [0; 40];
+    app.used_quiz_idx = 0;
+  }
+}
+
+fn get_unused_quiz_index(app: &App) -> Option<usize> {
+  let available_indices: Vec<usize> = (0..app.quiz_items.len())
+    .filter(|&index| !app.used_quiz_items.contains(&(index as u8)))
+    .collect();
+
+  if available_indices.is_empty() {
+    return None;
+  }
+
+  let mut rng = rand::thread_rng();
+  let random_index = available_indices[rng.gen_range(0..available_indices.len())];
+  
+  Some(random_index)
 }
