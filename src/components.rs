@@ -1,4 +1,4 @@
-use egui::{Color32, Ui};
+use egui::{Color32, RichText, Ui};
 use crate::app::App;
 
 pub fn health_bar(ui: &mut Ui, health: f32, right_to_left: bool) {
@@ -34,25 +34,30 @@ pub fn health_bar(ui: &mut Ui, health: f32, right_to_left: bool) {
 }
 
 pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
+  let button_size = egui::vec2(250.0, 45.0);
+  let num_of_answers = app.quiz.respuestas.len() as f32;
+  let spacing = if num_of_answers == 2.0 {
+    51.0
+  } else {
+    12.
+  };
+  let correct_ans = &app.quiz.respuesta_correcta;
   ui.vertical_centered(|ui| {
-    let button_size = egui::vec2(200.0, 50.0);
-    let available_height = 250.0; // Espacio total disponible
-    let total_buttons_height = 2.0 * button_size.y; // Espacio que necesitan los botones (4 botones * 50 altura cada uno)
-    let spacing = (available_height - total_buttons_height) / 3.0;  // Espacio que queremos entre elementos
     ui.add_space(spacing);
+    for (key, answer) in app.quiz.respuestas.iter() {
+      if correct_ans == key {
+        if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.)).fill(Color32::DARK_GREEN)).clicked() {
+          app.health.enemy_health -= 0.05;
+          app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
+        }
+      }else {
+        if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.))).clicked() {
+          app.health.hero_health -= 0.05;
+          app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
+        }
+      }
 
-    if ui.add_sized(button_size, egui::Button::new("Quitar vida hero")).clicked() {
-      app.health.hero_health -= 0.05;
-      app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
-      println!("hero: {}", app.health.hero_health);
+      ui.add_space(spacing);
     }
-    ui.add_space(spacing);
-    
-    if ui.add_sized(button_size, egui::Button::new("Quitar vida enemy")).clicked() {
-      app.health.enemy_health -= 0.05;
-      app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
-      println!("hero: {}", app.health.enemy_health);
-    }
-    ui.add_space(spacing);
   });
 }
