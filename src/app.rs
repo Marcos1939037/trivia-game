@@ -160,7 +160,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       ui.horizontal(|ui| {
         ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
           ui.label(
-            RichText::new("Unidad tematica 1 - Fundamentos de simulación y modelación")
+            RichText::new(&app.quiz.unidad_tematica)
               .size(15.0)
           );
           ui.add_space(ui.available_width() - 60.);            
