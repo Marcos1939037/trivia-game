@@ -63,10 +63,14 @@ impl App {
 
     let json_str = std::fs::read_to_string("assets/data/questions.json").unwrap();
     let quiz_items: Vec<QuizItem> = serde_json::from_str(&json_str).unwrap();
-
     let rng = rand::thread_rng().gen_range(0..quiz_items.len());
     let quiz = quiz_items[rng].clone();
     let used_quiz_items: [u8; 40] = [rng as u8; 40];
+    let duration = match quiz.tipo_reactivo.as_str() {
+      "Opción Múltiple" => Duration::from_secs(30),
+      "Verdadero o Falso" => Duration::from_secs(15),
+      _ => Duration::from_secs(0)
+    };
 
     Self {
       quiz_items: quiz_items,
@@ -74,7 +78,7 @@ impl App {
       used_quiz_items: used_quiz_items,
       used_quiz_idx: 1,
       screen: CurrentScreen::Menu,
-      duration: Duration::from_secs(60),
+      duration: duration,
       start_time: Instant::now(),
       health: HealthStatus {
         enemy_health: 1.0,
@@ -134,12 +138,18 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       app.duration - app.start_time.elapsed()
     };
 
-    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
+    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 || remaining == Duration::from_secs(0) {
       let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
       app.quiz = app.quiz_items.get(new_quiz)
           .unwrap()
           .to_owned();
 
+      app.duration = match app.quiz.tipo_reactivo.as_str() {
+        "Opción Múltiple" => Duration::from_secs(30),
+        "Verdadero o Falso" => Duration::from_secs(15),
+        _ => Duration::from_secs(0)
+      };
+      app.start_time = Instant::now();
       
       app.used_quiz_items[app.used_quiz_idx] = new_quiz as u8;
       app.used_quiz_idx += 1;
@@ -185,7 +195,8 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       .resizable(false)
       .show_separator_line(false)
       .show(ctx, |ui| {
-        ui.add_space(5.);
+        ui.add_space(5.
+        );
         ui.vertical_centered(|ui| {
           components::health_bar(ui, app.health.hero_health, false);
           ui.add_space(120.0);
