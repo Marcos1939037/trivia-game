@@ -45,14 +45,9 @@ cargo run
 ## 🚀 Tecnologías utilizadas
 - Rust 🦀
 
-## ✨ Características principales
-- Sistema de combate basado en preguntas
-- 40 preguntas diferentes distribuidas en 3 categorías
-- Sistema de dados para daño aleatorio
-- Barras de vida dinámicas
-- Temporizador para respuestas
-- Implementado en Rust para máximo rendimiento y seguridad en memoria
+## Objetivos
 
-## 🎯 Estado del proyecto
-- Versión actual: 0.1.0
-- Estado: En desarrollo activo
+- [ ] Terminar la funcionalidad de los botones
+- [ ] Realizar pantalla de analisis/estadisticas
+- [ ] Crear caracteristica de daño aleatorio al golpear enemigo
+- [ ] Crear sistema de rachas
