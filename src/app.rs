@@ -68,16 +68,6 @@ impl App {
     let quiz = quiz_items[rng].clone();
     let used_quiz_items: [u8; 40] = [rng as u8; 40];
 
-    // for item in &quiz_items {
-    //   println!("Pregunta: {}", item.pregunta);
-    //   println!("Tipo: {}", item.tipo_reactivo);
-    //   println!("Respuesta correcta: {}", item.respuesta_correcta);
-    //   println!("Opciones:");
-    //   for (key, value) in &item.respuestas {
-    //     println!("  {}: {}", key, value);
-    //   }
-    // }
-
     Self {
       quiz_items: quiz_items,
       quiz: quiz,
