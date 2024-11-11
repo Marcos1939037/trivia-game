@@ -7,13 +7,13 @@ use serde::{Deserialize, Serialize};
 const WHITE: Color32 = egui::Color32::WHITE;
 
 pub struct App {
-  quiz_items: Vec<QuizItem>,
+  pub quiz_items: Vec<QuizItem>,
   pub quiz: QuizItem,
-  used_quiz_items: [u8; 40],
-  used_quiz_idx: usize,
+  pub used_quiz_items: [u8; 40],
+  pub used_quiz_idx: usize,
   screen: CurrentScreen,
-  duration: Duration,
-  start_time: Instant,
+  pub duration: Duration,
+  pub start_time: Instant,
   pub health: HealthStatus,
 }
 
@@ -43,7 +43,7 @@ pub struct QuizItem {
   pub respuesta_correcta: String,
   
   #[serde(rename = "Tipo de reactivo")]
-  tipo_reactivo: String,
+  pub tipo_reactivo: String,
 }
 
 impl Clone for QuizItem {
@@ -67,8 +67,8 @@ impl App {
     let quiz = quiz_items[rng].clone();
     let used_quiz_items: [u8; 40] = [rng as u8; 40];
     let duration = match quiz.tipo_reactivo.as_str() {
-      "Opción Múltiple" => Duration::from_secs(30),
-      "Verdadero o Falso" => Duration::from_secs(15),
+      "Opción Múltiple" => Duration::from_secs(31),
+      "Verdadero o Falso" => Duration::from_secs(16),
       _ => Duration::from_secs(0)
     };
 
@@ -138,29 +138,11 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       app.duration - app.start_time.elapsed()
     };
 
-    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 || remaining == Duration::from_secs(0) {
-      let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
-      app.quiz = app.quiz_items.get(new_quiz)
-          .unwrap()
-          .to_owned();
+    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
+      app.screen = CurrentScreen::Analisis;
+    };
 
-      app.duration = match app.quiz.tipo_reactivo.as_str() {
-        "Opción Múltiple" => Duration::from_secs(30),
-        "Verdadero o Falso" => Duration::from_secs(15),
-        _ => Duration::from_secs(0)
-      };
-      app.start_time = Instant::now();
-      
-      app.used_quiz_items[app.used_quiz_idx] = new_quiz as u8;
-      app.used_quiz_idx += 1;
-      app.health.hero_health = 1.0;
-      app.health.enemy_health = 1.0;
 
-      if app.used_quiz_idx >= app.used_quiz_items.len() {
-        app.used_quiz_items = [0; 40];
-        app.used_quiz_idx = 0;
-      }
-    }
 
     TopBottomPanel::top("top_panel_ingame")
     .min_height(15.)
@@ -226,15 +208,8 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     });
 
     CentralPanel::default().show(ctx, |ui| {
-      let minutes = remaining.as_secs() /60;
-      let seconds = remaining.as_secs() % 60;
+      components::timer(ui, app, remaining);
 
-      ui.vertical_centered(|ui| {
-        ui.heading(egui::RichText::new(format!("{:02}:{:02}",minutes,seconds))
-          .size(60.)
-          .color(WHITE)
-        );
-      });
       ui.with_layout(egui::Layout::bottom_up(egui::Align::Center), |ui| {
         ui.label(egui::RichText::new(&app.quiz.pregunta)
         .size(30.)
@@ -245,20 +220,8 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
 
 #[allow(unused)]
 fn analisis_ui(app: &mut App, ctx: &egui::Context) {
-  todo!()
+  CentralPanel::default().show(ctx, |ui| {
+    ui.label(RichText::new("ANALISIS").size(50.0));
+  });
 }
 
-fn get_unused_quiz_index(app: &App) -> Option<usize> {
-  let available_indices: Vec<usize> = (0..app.quiz_items.len())
-      .filter(|&index| !app.used_quiz_items.contains(&(index as u8)))
-      .collect();
-
-  if available_indices.is_empty() {
-      return None;
-  }
-
-  let mut rng = rand::thread_rng();
-  let random_index = available_indices[rng.gen_range(0..available_indices.len())];
-  
-  Some(random_index)
-}
