@@ -15,7 +15,6 @@ pub struct App {
   duration: Duration,
   start_time: Instant,
   pub health: HealthStatus,
-  refresh: u64
 }
 
 pub struct HealthStatus {
@@ -91,7 +90,6 @@ impl App {
         enemy_health: 1.0,
         hero_health: 1.0
       },
-      refresh: 0
     }
   }
 }
@@ -103,9 +101,6 @@ impl eframe::App for App {
       CurrentScreen::Ingame => ingame_ui(self, ctx),
       CurrentScreen::Analisis => analisis_ui(self, ctx),
     }
-    println!("{:?}", self.used_quiz_items);
-    // self.refresh += 1;
-    // println!("{}",self.refresh);
     ctx.request_repaint_after(Duration::from_millis(250));
   }
 }
