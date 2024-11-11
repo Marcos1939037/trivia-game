@@ -8,7 +8,7 @@ const WHITE: Color32 = egui::Color32::WHITE;
 
 pub struct App {
   quiz_items: Vec<QuizItem>,
-  quiz: QuizItem,
+  pub quiz: QuizItem,
   used_quiz_items: [u8; 40],
   used_quiz_idx: usize,
   screen: CurrentScreen,
@@ -30,7 +30,7 @@ enum CurrentScreen {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct QuizItem {
+pub struct QuizItem {
   #[serde(rename = "Unidad Temática")]
   unidad_tematica: String,
   
@@ -38,10 +38,10 @@ struct QuizItem {
   pregunta: String,
   
   #[serde(rename = "Respuestas")]
-  respuestas: HashMap<String, String>,
+  pub respuestas: HashMap<String, String>,
   
   #[serde(rename = "Respuesta correcta")]
-  respuesta_correcta: String,
+  pub respuesta_correcta: String,
   
   #[serde(rename = "Tipo de reactivo")]
   tipo_reactivo: String,
@@ -187,7 +187,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       ui.separator();
     });
     TopBottomPanel::bottom("bottom_panel_ingame")
-      .min_height(250.)
+      .min_height(250.0)
       .resizable(false)
       .show_separator_line(false)
       .show(ctx, |ui| {
