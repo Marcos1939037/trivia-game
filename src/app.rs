@@ -6,15 +6,25 @@ use serde::{Deserialize, Serialize};
 
 const WHITE: Color32 = egui::Color32::WHITE;
 
+// Cantidad de aciertos
+// Número de respuestas erróneas
+// Porcentaje de aciertos 
+// Mejor racha de respuestas 
+// Mejor daño de golpe
+// Vida total perdida
 pub struct App {
-  pub quiz_items: Vec<QuizItem>,
-  pub quiz: QuizItem,
-  pub used_quiz_items: [u8; 40],
-  pub used_quiz_idx: usize,
+  pub quiz: Quiz,
   screen: CurrentScreen,
   pub duration: Duration,
   pub start_time: Instant,
   pub health: HealthStatus,
+}
+
+pub struct Quiz {
+  pub quiz_items: Vec<QuizItem>,
+  pub current_quiz: QuizItem,
+  pub used_quiz_items: [u8; 40],
+  pub used_quiz_idx: usize,
 }
 
 pub struct HealthStatus {
@@ -73,10 +83,12 @@ impl App {
     };
 
     Self {
-      quiz_items: quiz_items,
-      quiz: quiz,
-      used_quiz_items: used_quiz_items,
-      used_quiz_idx: 1,
+      quiz: Quiz {
+        quiz_items: quiz_items,
+        current_quiz: quiz,
+        used_quiz_items: used_quiz_items,
+        used_quiz_idx: 1,
+      },
       screen: CurrentScreen::Menu,
       duration: duration,
       start_time: Instant::now(),
@@ -152,7 +164,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       ui.horizontal(|ui| {
         ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
           ui.label(
-            RichText::new(&app.quiz.unidad_tematica)
+            RichText::new(&app.quiz.current_quiz.unidad_tematica)
               .size(15.0)
           );
           ui.add_space(ui.available_width() - 60.);            
@@ -211,7 +223,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       components::timer(ui, app, remaining);
 
       ui.with_layout(egui::Layout::bottom_up(egui::Align::Center), |ui| {
-        ui.label(egui::RichText::new(&app.quiz.pregunta)
+        ui.label(egui::RichText::new(&app.quiz.current_quiz.pregunta)
         .size(30.)
         .color(WHITE));
       });
