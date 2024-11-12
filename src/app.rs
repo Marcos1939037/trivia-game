@@ -1,17 +1,11 @@
 use crate::components;
 use std::{collections::HashMap, time::{Duration, Instant}};
-use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
+use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, ScrollArea, SidePanel, TopBottomPanel, Vec2};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 const WHITE: Color32 = egui::Color32::WHITE;
 
-// Cantidad de aciertos x
-// Número de respuestas erróneas x
-// Porcentaje de aciertos x
-// Mejor racha de respuestas x
-// Mejor daño de golpe x
-// Vida total perdida x
 pub struct App {
   pub quiz: Quiz,
   screen: CurrentScreen,
@@ -271,10 +265,49 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     });
 }
 
-#[allow(unused)]
+
 fn analisis_ui(app: &mut App, ctx: &egui::Context) {
+  SidePanel::left("left_results_panel")
+    .resizable(false)
+    .exact_width(600.0)
+    .show(ctx, |ui| {
+      ui.centered_and_justified(|ui| {
+        ui.label(RichText::new("GANASTE?").size(50.0))
+      })
+  });
   CentralPanel::default().show(ctx, |ui| {
-    ui.label(RichText::new("ANALISIS").size(50.0));
+      ui.add_space(20.0);
+      ui.vertical_centered(|ui| {
+        ui.label(RichText::new("Resultados").size(40.0))
+      });
+      ui.add_space(100.0);
+      egui::Grid::new("results_table")
+      .min_col_width(300.0)
+      .spacing([40.0, 25.0])
+      .show(ui, |ui| {
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Cantidad de aciertos").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+  
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Numero de respuestas erroneas").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+        
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Procentaje de aciertos").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+        
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Mejor racha de aciertos").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+        
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Mayor daño inflingido").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+        
+        ui.vertical_centered(|ui| {ui.label(RichText::new("Vida total perdida").size(18.0))});
+        ui.label(RichText::new("X").size(18.0));
+        ui.end_row();
+      });
   });
 }
-
