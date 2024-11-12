@@ -54,6 +54,23 @@ pub struct Quiz {
   pub used_quiz_idx: usize,
 }
 
+impl Default for Quiz {
+  fn default() -> Self {
+    let json_str = std::fs::read_to_string("assets/data/questions.json").unwrap();
+    let quiz_items: Vec<QuizItem> = serde_json::from_str(&json_str).unwrap();
+    let rng = rand::thread_rng().gen_range(0..quiz_items.len());
+    let quiz = quiz_items[rng].clone();
+    let used_quiz_items: [u8; 40] = [rng as u8; 40];
+
+    Quiz {
+      quiz_items: quiz_items,
+      current_quiz: quiz,
+      used_quiz_items: used_quiz_items,
+      used_quiz_idx: 1,
+    }
+  }
+}
+
 pub struct HealthStatus {
   pub enemy_health: f32,
   pub hero_health: f32,
