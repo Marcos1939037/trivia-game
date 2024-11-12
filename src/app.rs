@@ -131,19 +131,12 @@ impl App {
     };
 
     Self {
-      quiz: Quiz {
-        quiz_items: quiz_items,
-        current_quiz: quiz,
-        used_quiz_items: used_quiz_items,
-        used_quiz_idx: 1,
-      },
+      quiz,
       screen: CurrentScreen::Menu,
-      duration: duration,
+      duration,
       start_time: Instant::now(),
-      health: HealthStatus {
-        enemy_health: 1.0,
-        hero_health: 1.0
-      },
+      health: HealthStatus::default(),
+      session_data: AnalysisData::default(),
     }
   }
 }
