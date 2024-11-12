@@ -123,13 +123,8 @@ impl Clone for QuizItem {
 
 impl App {
   pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-
-    let json_str = std::fs::read_to_string("assets/data/questions.json").unwrap();
-    let quiz_items: Vec<QuizItem> = serde_json::from_str(&json_str).unwrap();
-    let rng = rand::thread_rng().gen_range(0..quiz_items.len());
-    let quiz = quiz_items[rng].clone();
-    let used_quiz_items: [u8; 40] = [rng as u8; 40];
-    let duration = match quiz.tipo_reactivo.as_str() {
+    let quiz = Quiz::default();
+    let duration = match quiz.current_quiz.tipo_reactivo.as_str() {
       "Opción Múltiple" => Duration::from_secs(31),
       "Verdadero o Falso" => Duration::from_secs(16),
       _ => Duration::from_secs(0)
