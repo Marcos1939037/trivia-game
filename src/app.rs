@@ -76,6 +76,15 @@ pub struct HealthStatus {
   pub hero_health: f32,
 }
 
+impl Default for HealthStatus {
+  fn default() -> Self {
+    HealthStatus {
+      enemy_health: 1.0, 
+      hero_health: 1.0
+    }
+  }
+}
+
 enum CurrentScreen {
   Menu,
   Ingame,
