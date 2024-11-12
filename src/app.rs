@@ -6,18 +6,45 @@ use serde::{Deserialize, Serialize};
 
 const WHITE: Color32 = egui::Color32::WHITE;
 
-// Cantidad de aciertos
-// Número de respuestas erróneas
-// Porcentaje de aciertos 
-// Mejor racha de respuestas 
-// Mejor daño de golpe
-// Vida total perdida
+// Cantidad de aciertos x
+// Número de respuestas erróneas x
+// Porcentaje de aciertos x
+// Mejor racha de respuestas x
+// Mejor daño de golpe x
+// Vida total perdida x
 pub struct App {
   pub quiz: Quiz,
   screen: CurrentScreen,
   pub duration: Duration,
   pub start_time: Instant,
   pub health: HealthStatus,
+  pub session_data: AnalysisData
+}
+
+pub struct AnalysisData {
+  correct_answers: u8,
+  wrong_answers: u8,
+  win_streak: (u8, u8), // (best steak, current steak)
+  total_quiz: u8,
+  best_hit: u8
+}
+
+impl AnalysisData {
+  pub fn get_hit_percentage(&self) -> f32 { // porcentaje de aciertos
+    (self.total_quiz as f32) / self.correct_answers as f32
+  }
+}
+
+impl Default for AnalysisData {
+  fn default() -> Self {
+    AnalysisData {
+      correct_answers: 0,
+      wrong_answers: 0,
+      win_streak: (0, 0),
+      total_quiz: 0,
+      best_hit: 0
+    }
+  }
 }
 
 pub struct Quiz {
