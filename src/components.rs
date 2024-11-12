@@ -40,14 +40,14 @@ pub fn health_bar(ui: &mut Ui, health: f32, right_to_left: bool) {
 
 pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
   let button_size = egui::vec2(250.0, 45.0);
-  let num_of_answers = app.quiz.respuestas.len() as f32;
+  let num_of_answers = app.quiz.current_quiz.respuestas.len() as f32;
   let spacing = if num_of_answers == 2.0 {
     51.0
   } else {
     12.
   };
-  let correct_ans = &app.quiz.respuesta_correcta.to_owned();
-  let answers = app.quiz.respuestas.clone();
+  let correct_ans = &app.quiz.current_quiz.respuesta_correcta.to_owned();
+  let answers = app.quiz.current_quiz.respuestas.clone();
   ui.vertical_centered(|ui| {
     ui.add_space(spacing);
     for (key, answer) in answers.iter() {
@@ -90,29 +90,29 @@ pub fn timer(ui: &mut Ui, app: &mut App, remaining: Duration) {
 
 fn select_new_quiz(app: &mut App) {
   let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
-  app.quiz = app.quiz_items.get(new_quiz)
+  app.quiz.current_quiz = app.quiz.quiz_items.get(new_quiz)
     .unwrap()
     .to_owned();
 
-  app.used_quiz_items[app.used_quiz_idx] = new_quiz as u8;
-  app.used_quiz_idx += 1;
+  app.quiz.used_quiz_items[app.quiz.used_quiz_idx] = new_quiz as u8;
+  app.quiz.used_quiz_idx += 1;
 
-  app.duration = match app.quiz.tipo_reactivo.as_str() {
+  app.duration = match app.quiz.current_quiz.tipo_reactivo.as_str() {
     "Opción Múltiple" => Duration::from_secs(31),
     "Verdadero o Falso" => Duration::from_secs(16),
     _ => Duration::from_secs(0)
   };
   app.start_time = Instant::now();
 
-  if app.used_quiz_idx >= app.used_quiz_items.len() {
-    app.used_quiz_items = [0; 40];
-    app.used_quiz_idx = 0;
+  if app.quiz.used_quiz_idx >= app.quiz.used_quiz_items.len() {
+    app.quiz.used_quiz_items = [0; 40];
+    app.quiz.used_quiz_idx = 0;
   }
 }
 
 fn get_unused_quiz_index(app: &App) -> Option<usize> {
-  let available_indices: Vec<usize> = (0..app.quiz_items.len())
-    .filter(|&index| !app.used_quiz_items.contains(&(index as u8)))
+  let available_indices: Vec<usize> = (0..app.quiz.quiz_items.len())
+    .filter(|&index| !app.quiz.used_quiz_items.contains(&(index as u8)))
     .collect();
 
   if available_indices.is_empty() {
