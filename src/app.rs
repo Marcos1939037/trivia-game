@@ -7,10 +7,8 @@ use serde::{Deserialize, Serialize};
 const WHITE: Color32 = egui::Color32::WHITE;
 
 pub struct App {
-  pub quiz: Quiz,
   screen: CurrentScreen,
-  pub duration: Duration,
-  pub start_time: Instant,
+  pub quiz: Quiz,
   pub health: HealthStatus,
   pub session_data: AnalysisData
 }
@@ -46,6 +44,8 @@ pub struct Quiz {
   pub current_quiz: QuizItem,
   pub used_quiz_items: [u8; 40],
   pub used_quiz_idx: usize,
+  pub duration: Duration,
+  pub start_time: Instant,
 }
 
 impl Default for Quiz {
@@ -55,12 +55,19 @@ impl Default for Quiz {
     let rng = rand::thread_rng().gen_range(0..quiz_items.len());
     let quiz = quiz_items[rng].clone();
     let used_quiz_items: [u8; 40] = [rng as u8; 40];
+    let duration = match quiz.tipo_reactivo.as_str() {
+      "Opción Múltiple" => Duration::from_secs(31),
+      "Verdadero o Falso" => Duration::from_secs(16),
+      _ => Duration::from_secs(0)
+    };
 
     Quiz {
       quiz_items: quiz_items,
       current_quiz: quiz,
       used_quiz_items: used_quiz_items,
       used_quiz_idx: 1,
+      duration,
+      start_time: Instant::now(),
     }
   }
 }
@@ -117,18 +124,9 @@ impl Clone for QuizItem {
 
 impl App {
   pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
-    let quiz = Quiz::default();
-    let duration = match quiz.current_quiz.tipo_reactivo.as_str() {
-      "Opción Múltiple" => Duration::from_secs(31),
-      "Verdadero o Falso" => Duration::from_secs(16),
-      _ => Duration::from_secs(0)
-    };
-
     Self {
-      quiz,
       screen: CurrentScreen::Menu,
-      duration,
-      start_time: Instant::now(),
+      quiz: Quiz::default(),
       health: HealthStatus::default(),
       session_data: AnalysisData::default(),
     }
@@ -179,17 +177,15 @@ fn menu_ui(app: &mut App, ctx: &egui::Context) {
 
 fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     // Actualizar el tiempo restante si el timer está corriendo
-    let remaining = if app.start_time.elapsed() >= app.duration {
+    let remaining = if app.quiz.start_time.elapsed() >= app.quiz.duration {
       Duration::from_secs(0)
     } else {
-      app.duration - app.start_time.elapsed()
+      app.quiz.duration - app.quiz.start_time.elapsed()
     };
 
     if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
       app.screen = CurrentScreen::Analisis;
     };
-
-
 
     TopBottomPanel::top("top_panel_ingame")
     .min_height(15.)
