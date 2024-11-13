@@ -25,7 +25,7 @@ pub struct AnalysisData {
 
 impl AnalysisData {
   pub fn get_hit_percentage(&self) -> f32 { // porcentaje de aciertos
-    (self.total_quiz as f32) / self.correct_answers as f32
+    (self.correct_answers as f32 / self.total_quiz as f32) * 100.0
   }
 }
 
