@@ -1,6 +1,6 @@
 use crate::components;
 use std::{collections::HashMap, time::{Duration, Instant}};
-use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, ScrollArea, SidePanel, TopBottomPanel, Vec2};
+use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
