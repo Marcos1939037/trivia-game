@@ -109,12 +109,12 @@ fn select_new_quiz(app: &mut App) {
   app.quiz.used_quiz_items[app.quiz.used_quiz_idx] = new_quiz as u8;
   app.quiz.used_quiz_idx += 1;
 
-  app.duration = match app.quiz.current_quiz.tipo_reactivo.as_str() {
+  app.quiz.duration = match app.quiz.current_quiz.tipo_reactivo.as_str() {
     "Opción Múltiple" => Duration::from_secs(31),
     "Verdadero o Falso" => Duration::from_secs(16),
     _ => Duration::from_secs(0)
   };
-  app.start_time = Instant::now();
+  app.quiz.start_time = Instant::now();
 
   if app.quiz.used_quiz_idx >= app.quiz.used_quiz_items.len() {
     app.quiz.used_quiz_items = [0; 40];
