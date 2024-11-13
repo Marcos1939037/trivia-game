@@ -55,12 +55,24 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
         if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.)).fill(Color32::DARK_GREEN)).clicked() {
           app.health.enemy_health -= 0.1;
           app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
+          app.session_data.total_quiz += 1;
+          app.session_data.correct_answers += 1;
+          let (mut best_steak, mut current_steak) = app.session_data.win_streak;
+          current_steak += 1;
+          if current_steak >= best_steak {
+            best_steak = current_steak;
+          }
+          app.session_data.win_streak.0 = best_steak;
+          app.session_data.win_streak.1 = current_steak;
           select_new_quiz(app);
         }
       }else {
         if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.))).clicked() {
           app.health.hero_health -= 0.1;
           app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
+          app.session_data.total_quiz += 1;
+          app.session_data.wrong_answers += 1;
+          app.session_data.win_streak.1 = 0;
           select_new_quiz(app);
         }
       }
