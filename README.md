@@ -23,10 +23,6 @@ Embárcate en una emocionante aventura donde asumes el rol de un valiente aventu
 5. **Respuesta incorrecta**  
    Si fallas, el enemigo te atacará, causando un daño fijo
 
-### Requisitos previos
-- Rust (última versión estable)
-- Cargo (incluido con Rust)
-
 ### Instalación
 ```bash
 # Clonar el repositorio
