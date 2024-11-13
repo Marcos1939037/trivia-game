@@ -16,11 +16,11 @@ pub struct App {
 }
 
 pub struct AnalysisData {
-  correct_answers: u8,
-  wrong_answers: u8,
-  win_streak: (u8, u8), // (best steak, current steak)
-  total_quiz: u8,
-  best_hit: u8
+  pub correct_answers: u8,
+  pub wrong_answers: u8,
+  pub win_streak: (u8, u8), // (best steak, current steak)
+  pub total_quiz: u8,
+  pub best_hit: u8
 }
 
 impl AnalysisData {
