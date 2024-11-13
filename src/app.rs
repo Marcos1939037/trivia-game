@@ -291,27 +291,27 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
       .spacing([40.0, 25.0])
       .show(ui, |ui| {
         ui.vertical_centered(|ui| {ui.label(RichText::new("Cantidad de aciertos").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new(app.session_data.correct_answers.to_string()).size(18.0));
         ui.end_row();
   
         ui.vertical_centered(|ui| {ui.label(RichText::new("Numero de respuestas erroneas").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new(app.session_data.wrong_answers.to_string()).size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Procentaje de aciertos").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new(format!("{}%",hit_percentage.to_string())).size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Mejor racha de aciertos").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new(app.session_data.win_streak.0.to_string()).size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Mayor daño inflingido").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new("_").size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Vida total perdida").size(18.0))});
-        ui.label(RichText::new("X").size(18.0));
+        ui.label(RichText::new(format!("{}%",lost_health.to_string())).size(18.0));
         ui.end_row();
       });
   });
