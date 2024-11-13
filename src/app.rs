@@ -276,6 +276,11 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
       })
   });
   CentralPanel::default().show(ctx, |ui| {
+    let lost_health = 1.0 - app.health.hero_health;
+    let lost_health = (lost_health * 100.0) as u8;
+
+    let hit_percentage = app.session_data.get_hit_percentage().floor();
+
       ui.add_space(20.0);
       ui.vertical_centered(|ui| {
         ui.label(RichText::new("Resultados").size(40.0))
