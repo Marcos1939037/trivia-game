@@ -43,7 +43,7 @@ cargo run
 
 ## Objetivos
 
-- [ ] Terminar la funcionalidad de los botones
-- [ ] Realizar pantalla de analisis/estadisticas
+- [x] Terminar la funcionalidad de los botones
+- [x] Realizar pantalla de analisis/estadisticas
 - [ ] Crear caracteristica de daño aleatorio al golpear enemigo
 - [ ] Crear sistema de rachas
