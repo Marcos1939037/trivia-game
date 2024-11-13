@@ -57,13 +57,13 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
           app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
           app.session_data.total_quiz += 1;
           app.session_data.correct_answers += 1;
-          let (mut best_steak, mut current_steak) = app.session_data.win_streak;
-          current_steak += 1;
-          if current_steak >= best_steak {
-            best_steak = current_steak;
+          let (mut best_streak, mut current_streak) = app.session_data.win_streak;
+          current_streak += 1;
+          if current_streak >= best_streak {
+            best_streak = current_streak;
           }
-          app.session_data.win_streak.0 = best_steak;
-          app.session_data.win_streak.1 = current_steak;
+          app.session_data.win_streak.0 = best_streak;
+          app.session_data.win_streak.1 = current_streak;
           select_new_quiz(app);
         }
       }else {

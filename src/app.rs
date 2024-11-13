@@ -16,7 +16,7 @@ pub struct App {
 pub struct AnalysisData {
   pub correct_answers: u8,
   pub wrong_answers: u8,
-  pub win_streak: (u8, u8), // (best steak, current steak)
+  pub win_streak: (u8, u8), // (best streak, current streak)
   pub total_quiz: u8,
   pub best_hit: u8
 }
