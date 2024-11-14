@@ -360,7 +360,7 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Mayor daño inflingido").size(18.0))});
-        ui.label(RichText::new(app.session_data.best_hit.to_string()).size(18.0));
+        ui.label(RichText::new(format!("{} pts",app.session_data.best_hit)).size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Vida total perdida").size(18.0))});
