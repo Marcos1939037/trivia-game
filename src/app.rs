@@ -90,6 +90,7 @@ impl Default for Quiz {
     let duration = match quiz.tipo_reactivo.as_str() {
       "Opción Múltiple" => Duration::from_secs(31),
       "Verdadero o Falso" => Duration::from_secs(16),
+      "Ejercicio" => Duration::from_secs(300),
       _ => Duration::from_secs(0)
     };
 

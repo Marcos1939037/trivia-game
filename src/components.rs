@@ -232,6 +232,7 @@ pub fn select_new_quiz(app: &mut App) {
   app.quiz.duration = match app.quiz.current_quiz.tipo_reactivo.as_str() {
     "Opción Múltiple" => Duration::from_secs(31),
     "Verdadero o Falso" => Duration::from_secs(16),
+    "Ejercicio" => Duration::from_secs(300),
     _ => Duration::from_secs(0)
   };
   app.quiz.start_time = Instant::now();
