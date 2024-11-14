@@ -160,7 +160,9 @@ impl eframe::App for App {
       CurrentScreen::Ingame => ingame_ui(self, ctx),
       CurrentScreen::Analisis => analisis_ui(self, ctx),
     }
-    ctx.request_repaint_after(Duration::from_millis(250));
+    if !self.rnd_animation.is_animating {
+      ctx.request_repaint_after(Duration::from_millis(250));
+    }
   }
 }
 
