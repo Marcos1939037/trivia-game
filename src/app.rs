@@ -312,7 +312,22 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       };
       
       if remaining == Duration::from_secs(0) {
-        app.health.enemy_health -= app.rnd_animation.rnd_number as f32/10.0;
+        match app.streak {
+          StreakState::NoStreak => {
+            app.health.enemy_health -= dbg!(app.rnd_animation.rnd_number as f32/100.0);
+          },
+          StreakState::X2 => {
+            app.health.enemy_health -= dbg!((app.rnd_animation.rnd_number as f32/100.0)*2.0);
+          },
+          StreakState::X3 => {
+            app.health.enemy_health -= dbg!((app.rnd_animation.rnd_number as f32/100.0)*3.0);
+          }
+        }
+        match app.session_data.win_streak.1 {
+          streak if streak >= 3 && streak < 5 => app.streak = StreakState::X2,
+          streak if streak >= 5 => app.streak = StreakState::X3,
+          _ => ()
+        }
         app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
         app.rnd_animation.is_animating = false;
         app.rnd_animation.animation_start = None;
