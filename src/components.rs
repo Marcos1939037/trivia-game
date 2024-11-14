@@ -2,7 +2,7 @@ use std::time::{Duration, Instant};
 
 use egui::{Color32, RichText, Ui};
 use rand::Rng;
-use crate::app::App;
+use crate::app::{App, StreakState};
 
 const WHITE: Color32 = egui::Color32::WHITE;
 
@@ -83,6 +83,7 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
           ).clicked()
         }).inner;
         if clicked {
+          app.streak = StreakState::NoStreak;
           app.health.hero_health -= 0.1;
           app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
           app.session_data.total_quiz += 1;
