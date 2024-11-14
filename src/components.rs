@@ -91,7 +91,6 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
           select_new_quiz(app);
         }
       }
-
       ui.add_space(spacing);
     }
   });
@@ -115,7 +114,7 @@ pub fn timer(ui: &mut Ui, app: &mut App, remaining: Duration) {
   });
 }
 
-fn select_new_quiz(app: &mut App) {
+pub fn select_new_quiz(app: &mut App) {
   let new_quiz = get_unused_quiz_index(app).unwrap_or(0);
   app.quiz.current_quiz = app.quiz.quiz_items.get(new_quiz)
     .unwrap()
