@@ -252,43 +252,71 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
           .max_width(180.0)
           .max_height(180.0)
         );
-        ui.vertical_centered(|ui| {
-          components::health_bar(ui, app.health.hero_health, false);
-          ui.add_space(120.0);
-          ui.add(
-            Image::new(egui::include_image!("../assets/img/hero.png"))
-            .max_width(180.0)
-            .max_height(180.0)
-          );
-        });
-    });
+      });
+  });
+    
+  SidePanel::right("right_panel_ingame")
+    .min_width(350.0)
+    .resizable(false)
+    .show_separator_line(false)
+    .show(ctx, |ui| {
+      ui.add_space(5.);
+      ui.vertical_centered(|ui| {
+        components::health_bar(ui, app.health.enemy_health, true);
+        ui.add_space(150.0);
+        ui.add(
+          Image::new(egui::include_image!("../assets/img/enemy_1.png"))
+          .max_width(150.0)
+          .max_height(150.0)
+        );
+      });
+  });
+
+  CentralPanel::default().show(ctx, |ui| {    
+    if app.rnd_animation.is_animating {
+      let remaining = if app.rnd_animation.animation_start.unwrap().elapsed() >= app.rnd_animation.duration {
+        Duration::from_secs(0)
+      } else {
+        app.rnd_animation.duration - app.rnd_animation.animation_start.unwrap().elapsed()
+      };
       
-    SidePanel::right("right_panel_ingame")
-      .min_width(350.0)
-      .resizable(false)
-      .show_separator_line(false)
-      .show(ctx, |ui| {
-        ui.add_space(5.);
-        ui.vertical_centered(|ui| {
-          components::health_bar(ui, app.health.enemy_health, true);
-          ui.add_space(150.0);
-          ui.add(
-            Image::new(egui::include_image!("../assets/img/enemy_1.png"))
-            .max_width(150.0)
-            .max_height(150.0)
-          );
-        });
-    });
+      if remaining == Duration::from_secs(0) {
+        app.health.enemy_health -= app.rnd_animation.rnd_number as f32/10.0;
+        app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
+        app.rnd_animation.is_animating = false;
+        app.rnd_animation.animation_start = None;
+        components::select_new_quiz(app);
+      }
 
-    CentralPanel::default().show(ctx, |ui| {
+      ui.add_space(20.0);
+      ui.vertical_centered(|ui| {
+        ui.label(egui::RichText::new("Lanzando el dado...")
+        .size(20.)
+        .color(WHITE));
+
+      ui.add_space(10.0);
+
+      ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
+        .size(25.)
+        .color(WHITE));
+      });
+
+      if remaining >=Duration::from_secs(1) {
+        let mut rng = rand::thread_rng();
+        app.rnd_animation.rnd_number = rng.gen_range(1..=10);
+      }
+      thread::sleep(Duration::from_millis(50));
+      ctx.request_repaint();
+    }else {
       components::timer(ui, app, remaining);
-
+      
       ui.with_layout(egui::Layout::bottom_up(egui::Align::Center), |ui| {
         ui.label(egui::RichText::new(&app.quiz.current_quiz.pregunta)
         .size(30.)
         .color(WHITE));
       });
-    });
+    }
+  });
 }
 
 
