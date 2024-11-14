@@ -46,4 +46,4 @@ cargo run
 - [x] Terminar la funcionalidad de los botones
 - [x] Realizar pantalla de analisis/estadisticas
 - [x] Crear caracteristica de daño aleatorio al golpear enemigo
-- [ ] Crear sistema de rachas
+- [x] Crear sistema de rachas
