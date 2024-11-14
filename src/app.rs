@@ -340,20 +340,69 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
       ui.add_space(20.0);
       ui.vertical_centered(|ui| {
         ui.label(egui::RichText::new("Lanzando el dado...")
-        .size(20.)
-        .color(WHITE));
+          .size(20.)
+          .color(WHITE));
 
-      ui.add_space(10.0);
+        ui.add_space(10.0);
 
-      ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
-        .size(25.)
-        .color(WHITE));
+        if remaining > Duration::from_secs(1) {
+          ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
+            .size(25.)
+            .color(WHITE)
+          );
+        }
+
+        if remaining <= Duration::from_secs(1) {
+          match app.streak {
+            StreakState::NoStreak => {
+              ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
+                .size(25.)
+                .color(WHITE)
+              );
+            },
+            StreakState::X2 => {
+              ui.horizontal(|ui| {
+                ui.add_space(235.0);
+            
+                ui.vertical(|ui| {
+                  ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
+                    .size(25.)
+                    .color(WHITE));
+                });
+            
+                ui.vertical(|ui| {
+                  ui.label(egui::RichText::new("x2")
+                    .size(25.)
+                    .color(Color32::ORANGE));
+                });
+              });
+            },
+            StreakState::X3 => {
+              ui.horizontal(|ui| {
+                ui.add_space(235.0);
+            
+                ui.vertical(|ui| {
+                  ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
+                    .size(25.)
+                    .color(WHITE));
+                });
+            
+                ui.vertical(|ui| {
+                  ui.label(egui::RichText::new("x3")
+                    .size(25.)
+                    .color(Color32::RED));
+                });
+              });
+            }
+          }
+        }
       });
 
-      if remaining >=Duration::from_secs(1) {
+      if remaining >= Duration::from_secs(1) {
         let mut rng = rand::thread_rng();
         app.rnd_animation.rnd_number = rng.gen_range(1..=10);
       }
+
       thread::sleep(Duration::from_millis(50));
       ctx.request_repaint();
     }else {
