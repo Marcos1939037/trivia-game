@@ -48,26 +48,41 @@ pub fn question_mode_1(ui: &mut Ui, app: &mut App) {
   };
   let correct_ans = &app.quiz.current_quiz.respuesta_correcta.to_owned();
   let answers = app.quiz.current_quiz.respuestas.clone();
+
   ui.vertical_centered(|ui| {
     ui.add_space(spacing);
     for (key, answer) in answers.iter() {
       if correct_ans == key {
-        if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.)).fill(Color32::DARK_GREEN)).clicked() {
-          app.health.enemy_health -= 0.1;
-          app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
+        let clicked = ui.add_enabled_ui(!app.rnd_animation.is_animating, |ui| {
+          ui.add_sized(
+            button_size,
+            egui::Button::new(RichText::new(answer).size(15.0))
+              .fill(Color32::DARK_GREEN)
+          ).clicked()
+        }).inner;
+        if clicked {
           app.session_data.total_quiz += 1;
           app.session_data.correct_answers += 1;
+
           let (mut best_streak, mut current_streak) = app.session_data.win_streak;
           current_streak += 1;
           if current_streak >= best_streak {
             best_streak = current_streak;
           }
+
           app.session_data.win_streak.0 = best_streak;
           app.session_data.win_streak.1 = current_streak;
-          select_new_quiz(app);
+          app.rnd_animation.is_animating = true;
+          app.rnd_animation.animation_start = Some(Instant::now());
         }
       }else {
-        if ui.add_sized(button_size, egui::Button::new(RichText::new(answer).size(15.))).clicked() {
+        let clicked = ui.add_enabled_ui(!app.rnd_animation.is_animating, |ui| {
+          ui.add_sized(
+            button_size,
+            egui::Button::new(RichText::new(answer).size(15.0))
+          ).clicked()
+        }).inner;
+        if clicked {
           app.health.hero_health -= 0.1;
           app.health.hero_health = app.health.hero_health.clamp(0.0, 1.0);
           app.session_data.total_quiz += 1;
