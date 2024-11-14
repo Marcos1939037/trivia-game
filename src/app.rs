@@ -198,16 +198,35 @@ fn menu_ui(app: &mut App, ctx: &egui::Context) {
 }
 
 fn ingame_ui(app: &mut App, ctx: &egui::Context) {
-    // Actualizar el tiempo restante si el timer está corriendo
-    let remaining = if app.quiz.start_time.elapsed() >= app.quiz.duration {
-      Duration::from_secs(0)
-    } else {
-      app.quiz.duration - app.quiz.start_time.elapsed()
-    };
+  // Actualizar el tiempo restante si el timer está corriendo
+  let remaining = if app.quiz.start_time.elapsed() >= app.quiz.duration {
+    Duration::from_secs(0)
+  } else {
+    app.quiz.duration - app.quiz.start_time.elapsed()
+  };
+  if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
+    app.screen = CurrentScreen::Analisis;
+  };
 
-    if app.health.enemy_health == 0.0 || app.health.hero_health == 0.0 {
-      app.screen = CurrentScreen::Analisis;
-    };
+  TopBottomPanel::top("top_panel_ingame")
+  .min_height(15.)
+  .resizable(false)
+  .show_separator_line(false)
+  .show(ctx, |ui| {
+    ui.horizontal(|ui| {
+      ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
+        ui.label(
+          RichText::new(&app.quiz.current_quiz.unidad_tematica)
+            .size(15.0)
+        );
+        ui.add_space(ui.available_width() - 60.);            
+        if ui.add_sized(egui::vec2(25.0, 10.0), egui::Button::new("☰ Menu")).clicked() {
+          println!("Botón clicado!");
+        }
+      });
+    });
+    ui.separator();
+  });
 
     TopBottomPanel::top("top_panel_ingame")
     .min_height(15.)
