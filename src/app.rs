@@ -256,11 +256,28 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     .resizable(false)
     .show_separator_line(false)
     .show(ctx, |ui| {
-      ui.add_space(5.
-      );
+      ui.add_space(5.0);
       ui.vertical_centered(|ui| {
         components::health_bar(ui, app.health.hero_health, false);
-        ui.add_space(120.0);
+        match app.streak {
+          StreakState::NoStreak => {ui.add_space(120.0);}
+          StreakState::X2 => {
+            ui.add(
+              egui::Button::new(RichText::new("Multiplicador x2").color(WHITE).size(15.0))
+                .fill(Color32::ORANGE)
+                .sense(egui::Sense::hover())
+            );
+            ui.add_space(105.0);
+          }
+          StreakState::X3 => {
+            ui.add(
+              egui::Button::new(RichText::new("Multiplicador x3").color(WHITE).size(15.0))
+                .fill(Color32::RED)
+                .sense(egui::Sense::hover())
+            );
+            ui.add_space(105.0);
+          }
+        }
         ui.add(
           Image::new(egui::include_image!("../assets/img/hero.png"))
           .max_width(180.0)
