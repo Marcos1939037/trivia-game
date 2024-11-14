@@ -285,6 +285,9 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
         app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
         app.rnd_animation.is_animating = false;
         app.rnd_animation.animation_start = None;
+        if app.rnd_animation.rnd_number as u8 >= app.session_data.best_hit {
+          app.session_data.best_hit = app.rnd_animation.rnd_number as u8;
+        }
         components::select_new_quiz(app);
       }
 
@@ -361,7 +364,7 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Mayor daño inflingido").size(18.0))});
-        ui.label(RichText::new("_").size(18.0));
+        ui.label(RichText::new(app.session_data.best_hit.to_string()).size(18.0));
         ui.end_row();
         
         ui.vertical_centered(|ui| {ui.label(RichText::new("Vida total perdida").size(18.0))});
