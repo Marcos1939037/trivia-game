@@ -1,5 +1,5 @@
-use crate::components;
-use std::{collections::HashMap, thread, time::{Duration, Instant}};
+use crate::components::{self, rand_num_animation};
+use std::{collections::HashMap, time::{Duration, Instant}};
 use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -29,7 +29,7 @@ impl Default for StreakState {
 
 pub struct RndNumberAnimation {
   pub animation_start: Option<Instant>,
-  duration: Duration,
+  pub duration: Duration,
   pub is_animating: bool,
   pub rnd_number: usize,
 }
@@ -267,7 +267,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
                 .fill(Color32::ORANGE)
                 .sense(egui::Sense::hover())
             );
-            ui.add_space(105.0);
+            ui.add_space(99.0);
           }
           StreakState::X3 => {
             ui.add(
@@ -275,7 +275,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
                 .fill(Color32::RED)
                 .sense(egui::Sense::hover())
             );
-            ui.add_space(105.0);
+            ui.add_space(99.0);
           }
         }
         ui.add(
@@ -305,106 +305,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
 
   CentralPanel::default().show(ctx, |ui| {    
     if app.rnd_animation.is_animating {
-      let remaining = if app.rnd_animation.animation_start.unwrap().elapsed() >= app.rnd_animation.duration {
-        Duration::from_secs(0)
-      } else {
-        app.rnd_animation.duration - app.rnd_animation.animation_start.unwrap().elapsed()
-      };
-      
-      if remaining == Duration::from_secs(0) {
-        match app.streak {
-          StreakState::NoStreak => {
-            app.health.enemy_health -= dbg!(app.rnd_animation.rnd_number as f32/100.0);
-          },
-          StreakState::X2 => {
-            app.health.enemy_health -= dbg!((app.rnd_animation.rnd_number as f32/100.0)*2.0);
-          },
-          StreakState::X3 => {
-            app.health.enemy_health -= dbg!((app.rnd_animation.rnd_number as f32/100.0)*3.0);
-          }
-        }
-        match app.session_data.win_streak.1 {
-          streak if streak >= 3 && streak < 5 => app.streak = StreakState::X2,
-          streak if streak >= 5 => app.streak = StreakState::X3,
-          _ => ()
-        }
-        app.health.enemy_health = app.health.enemy_health.clamp(0.0, 1.0);
-        app.rnd_animation.is_animating = false;
-        app.rnd_animation.animation_start = None;
-        if app.rnd_animation.rnd_number as u8 >= app.session_data.best_hit {
-          app.session_data.best_hit = app.rnd_animation.rnd_number as u8;
-        }
-        components::select_new_quiz(app);
-      }
-
-      ui.add_space(20.0);
-      ui.vertical_centered(|ui| {
-        ui.label(egui::RichText::new("Lanzando el dado...")
-          .size(20.)
-          .color(WHITE));
-
-        ui.add_space(10.0);
-
-        if remaining > Duration::from_secs(1) {
-          ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
-            .size(25.)
-            .color(WHITE)
-          );
-        }
-
-        if remaining <= Duration::from_secs(1) {
-          match app.streak {
-            StreakState::NoStreak => {
-              ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
-                .size(25.)
-                .color(WHITE)
-              );
-            },
-            StreakState::X2 => {
-              ui.horizontal(|ui| {
-                ui.add_space(235.0);
-            
-                ui.vertical(|ui| {
-                  ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
-                    .size(25.)
-                    .color(WHITE));
-                });
-            
-                ui.vertical(|ui| {
-                  ui.label(egui::RichText::new("x2")
-                    .size(25.)
-                    .color(Color32::ORANGE));
-                });
-              });
-            },
-            StreakState::X3 => {
-              ui.horizontal(|ui| {
-                ui.add_space(235.0);
-            
-                ui.vertical(|ui| {
-                  ui.label(egui::RichText::new(app.rnd_animation.rnd_number.to_string())
-                    .size(25.)
-                    .color(WHITE));
-                });
-            
-                ui.vertical(|ui| {
-                  ui.label(egui::RichText::new("x3")
-                    .size(25.)
-                    .color(Color32::RED));
-                });
-              });
-            }
-          }
-        }
-      });
-
-      if remaining >= Duration::from_secs(1) {
-        let mut rng = rand::thread_rng();
-        app.rnd_animation.rnd_number = rng.gen_range(1..=10);
-      }
-
-      thread::sleep(Duration::from_millis(50));
-      ctx.request_repaint();
+      rand_num_animation(ui, app, ctx);
     }else {
       components::timer(ui, app, remaining);
       
