@@ -1,5 +1,5 @@
 use crate::components;
-use std::{collections::HashMap, time::{Duration, Instant}};
+use std::{collections::HashMap, thread, time::{Duration, Instant}};
 use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
@@ -10,7 +10,26 @@ pub struct App {
   screen: CurrentScreen,
   pub quiz: Quiz,
   pub health: HealthStatus,
-  pub session_data: AnalysisData
+  pub session_data: AnalysisData,
+  pub rnd_animation: RndNumberAnimation
+}
+
+pub struct RndNumberAnimation {
+  pub animation_start: Option<Instant>,
+  duration: Duration,
+  pub is_animating: bool,
+  pub rnd_number: usize,
+}
+
+impl Default for RndNumberAnimation {
+  fn default() -> Self {
+    RndNumberAnimation {
+      animation_start: None,
+      duration: Duration::from_secs(2),
+      is_animating: false,
+      rnd_number: 0,
+    }
+  }
 }
 
 pub struct AnalysisData {
