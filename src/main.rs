@@ -11,6 +11,7 @@ fn main() -> eframe::Result {
             .with_resizable(false)
             .with_maximize_button(false),
         centered: true,
+        vsync: true,
         ..Default::default()
     };
 
