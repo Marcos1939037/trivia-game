@@ -111,9 +111,11 @@ pub fn rand_num_animation(ui: &mut Ui, app: &mut App, ctx: &egui::Context) {
       },
       StreakState::X2 => {
         app.health.enemy_health -= (app.rnd_animation.rnd_number as f32/100.0)*2.0;
+        app.rnd_animation.rnd_number = app.rnd_animation.rnd_number * 2 
       },
       StreakState::X3 => {
         app.health.enemy_health -= (app.rnd_animation.rnd_number as f32/100.0)*3.0;
+        app.rnd_animation.rnd_number = app.rnd_animation.rnd_number * 3 
       }
     }
     match app.session_data.win_streak.1 {
