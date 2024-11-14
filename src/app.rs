@@ -228,40 +228,29 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
     ui.separator();
   });
 
-    TopBottomPanel::top("top_panel_ingame")
-    .min_height(15.)
+  TopBottomPanel::bottom("bottom_panel_ingame")
+    .min_height(250.0)
     .resizable(false)
     .show_separator_line(false)
     .show(ctx, |ui| {
-      ui.horizontal(|ui| {
-        ui.with_layout(Layout::left_to_right(Align::Center), |ui| {
-          ui.label(
-            RichText::new(&app.quiz.current_quiz.unidad_tematica)
-              .size(15.0)
-          );
-          ui.add_space(ui.available_width() - 60.);            
-          if ui.add_sized(egui::vec2(25.0, 10.0), egui::Button::new("☰ Menu")).clicked() {
-            println!("Botón clicado!");
-          }
-        });
-      });
       ui.separator();
-    });
-    TopBottomPanel::bottom("bottom_panel_ingame")
-      .min_height(250.0)
-      .resizable(false)
-      .show_separator_line(false)
-      .show(ctx, |ui| {
-        ui.separator();
-        components::question_mode_1(ui, app);
-    });
+      components::question_mode_1(ui, app);
+  });
 
-    SidePanel::left("left_panel_ingame")
-      .min_width(350.0)
-      .resizable(false)
-      .show_separator_line(false)
-      .show(ctx, |ui| {
-        ui.add_space(5.
+  SidePanel::left("left_panel_ingame")
+    .min_width(350.0)
+    .resizable(false)
+    .show_separator_line(false)
+    .show(ctx, |ui| {
+      ui.add_space(5.
+      );
+      ui.vertical_centered(|ui| {
+        components::health_bar(ui, app.health.hero_health, false);
+        ui.add_space(120.0);
+        ui.add(
+          Image::new(egui::include_image!("../assets/img/hero.png"))
+          .max_width(180.0)
+          .max_height(180.0)
         );
         ui.vertical_centered(|ui| {
           components::health_bar(ui, app.health.hero_health, false);
