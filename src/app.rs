@@ -1,4 +1,4 @@
-use crate::components::{self, rand_num_animation};
+use crate::components;
 use std::{collections::HashMap, time::{Duration, Instant}};
 use egui::{Align, CentralPanel, Color32, Image, Layout, RichText, SidePanel, TopBottomPanel};
 use rand::Rng;
@@ -305,7 +305,7 @@ fn ingame_ui(app: &mut App, ctx: &egui::Context) {
 
   CentralPanel::default().show(ctx, |ui| {    
     if app.rnd_animation.is_animating {
-      rand_num_animation(ui, app, ctx);
+      components::rand_num_animation(ui, app, ctx);
     }else {
       components::timer(ui, app, remaining);
       
