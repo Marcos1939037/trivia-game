@@ -11,7 +11,20 @@ pub struct App {
   pub quiz: Quiz,
   pub health: HealthStatus,
   pub session_data: AnalysisData,
-  pub rnd_animation: RndNumberAnimation
+  pub rnd_animation: RndNumberAnimation,
+  pub streak: StreakState
+}
+
+pub enum StreakState {
+  X2,
+  X3,
+  NoStreak
+}
+
+impl Default for StreakState {
+  fn default() -> Self {
+    Self::NoStreak
+  }
 }
 
 pub struct RndNumberAnimation {
@@ -149,6 +162,7 @@ impl App {
       health: HealthStatus::default(),
       session_data: AnalysisData::default(),
       rnd_animation: RndNumberAnimation::default(),
+      streak: StreakState::default(),
     }
   }
 }
