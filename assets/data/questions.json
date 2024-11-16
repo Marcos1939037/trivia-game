@@ -37,7 +37,7 @@
 
     },
     {
-        "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+        "Unidad Temática" : "2 - Generación de valores para simulación",
         "Pregunta" : "A que generador coreresponde la formula: Xn+1 = (aXn + c) mod m",
         "Respuestas" : {
             "a": "Generador congruencial multiplicativo", 
@@ -49,7 +49,7 @@
         "Tipo de reactivo" : "Opción Múltiple"     
     },
     {
-        "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+        "Unidad Temática" : "2 - Generación de valores para simulación",
         "Pregunta" : "Determine el periodo del siguiente generador congruencial: Xn+1 = (5Xn) mod 64 ; X0 = 7",
         "Respuestas" : {
             "a": "El periodo es completo y los números rectangulares son aceptados.", 
@@ -59,7 +59,27 @@
         "Tipo de reactivo" : "Ejercicio"     
     },
     {
-        "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+        "Unidad Temática" : "2 - Generación de valores para simulación",
+        "Pregunta" : "Determine el periodo del siguiente generador congruencial: Xn+1 = (11Xn) mod 128 ; X0 = 9",
+        "Respuestas" : {
+            "a": "El periodo es completo y los números rectangulares son aceptados.", 
+            "b": "Los números rectangulares son rechazados, el periodo no es completo."
+        },
+        "Respuesta correcta" : "a",
+        "Tipo de reactivo" : "Ejercicio"     
+    },
+    {
+        "Unidad Temática" : "2 - Generación de valores para simulación",
+        "Pregunta" : "Determine el periodo del siguiente generador congruencial: Xn+1 = (8Xn + 16) mod 100 ; X0 = 15",
+        "Respuestas" : {
+            "a": "El periodo es completo y los números rectangulares son aceptados.", 
+            "b": "Los números rectangulares son rechazados, el periodo no es completo."
+        },
+        "Respuesta correcta" : "b",
+        "Tipo de reactivo" : "Ejercicio"     
+    },
+    {
+        "Unidad Temática" : "2 - Generación de valores para simulación",
         "Pregunta" : "Efectúe la prueba de promedios para los siguientes números rectangulares con un nivel de significancia del 5%: 0.34712 0.99358 0.79750 0.23584 0.81921 0.93394 0.17855 0.19192 0.25276 0.21399",
         "Respuestas" : {
             "a": "Los números rectangulares son aceptados", 
@@ -69,11 +89,33 @@
         "Tipo de reactivo" : "Ejercicio"     
     },
     {
-        "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
+        "Unidad Temática" : "2 - Generación de valores para simulación",
         "Pregunta" : "Efectúe la prueba de Kolmogorov-Smirnov para los siguientes números rectangulares con un nivel de significancia del 5%: 0.38017 0.92561 0.04793 0.61358 0.29845 0.75106 0.46920 0.83274 0.15960 0.57482",
         "Respuestas" : {
             "a": "Los números rectangulares son aceptados", 
             "b": "Los números rectangulares son rechazados"
+        },
+        "Respuesta correcta" : "a",
+        "Tipo de reactivo" : "Ejercicio"     
+    }
+    ,
+    {
+        "Unidad Temática" : "2 - Generación de valores para simulación",
+        "Pregunta" : "Aplica la fórmula de distribución exponencial para los siguientes números y obtén el tiempo promedio: 0.73582 0.16945 0.92837 0.50123 0.34761 0.89012 0.25678 0.61439 0.48320 0.07564",
+        "Respuestas" : {
+            "a": "TP = 0.9138", 
+            "b": "TP = 0.9176"
+        },
+        "Respuesta correcta" : "b",
+        "Tipo de reactivo" : "Ejercicio"     
+    }
+    ,
+    {
+        "Unidad Temática" : "2 - Generación de valores para simulación",
+        "Pregunta" : "Aplica la fórmula de distribución exponencial para los siguientes números y obtén el tiempo promedio: 0.29385 0.64172 0.87531 0.10946 0.53298 0.46702 0.91865 0.75421 0.38054 0.02697",
+        "Respuestas" : {
+            "a": "TP = 1.0350", 
+            "b": "TP = 1.3050"
         },
         "Respuesta correcta" : "a",
         "Tipo de reactivo" : "Ejercicio"     
@@ -91,7 +133,7 @@
     },
     {
         "Unidad Temática" : "1 - Fundamentos de simulación y modelación",
-        "Pregunta" : "A que prueba corresponde la siguiente formula x^2 = 1/FEi  i=1, n ∑ (FOi-FEi)^2",
+        "Pregunta" : "¿A qué prueba corresponde la siguiente formula x^2 = 1/FEi  i=1, n ∑ (FOi-FEi)^2?",
         "Respuestas" : {
             "a": "Prueba de Series", 
             "b": "Prueba de Frecuencias",
