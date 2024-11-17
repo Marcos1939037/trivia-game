@@ -377,5 +377,19 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
         ui.label(RichText::new(format!("{}%",lost_health.to_string())).size(18.0));
         ui.end_row();
       });
+      ui.add_space(50.0);
+      ui.vertical_centered(|ui| {
+        if ui.add_sized(
+          egui::vec2(250.0, 45.0),
+          egui::Button::new(RichText::new("Volver a jugar").size(15.0))
+        ).clicked() {
+          app.health = HealthStatus::default();
+          app.quiz = Quiz::default();
+          app.session_data = AnalysisData::default();
+          app.rnd_animation = RndNumberAnimation::default();
+          app.streak = StreakState::default();
+          app.screen = CurrentScreen::Ingame;
+        };
+      });
   });
 }
