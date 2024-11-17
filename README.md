@@ -47,6 +47,6 @@ cargo run
 - [x] Realizar pantalla de analisis/estadisticas
 - [x] Crear caracteristica de daño aleatorio al golpear enemigo
 - [x] Crear sistema de rachas
-- [ ] Notificar al jugador si gano o perdio en la pantalla de analisis
-- [ ] Crear boton de volver a jugar
+- [x] Notificar al jugador si gano o perdio en la pantalla de analisis
+- [x] Crear boton de volver a jugar
 - [ ] Acomodar el menu principal
