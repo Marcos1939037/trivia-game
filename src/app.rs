@@ -325,9 +325,18 @@ fn analisis_ui(app: &mut App, ctx: &egui::Context) {
     .resizable(false)
     .exact_width(600.0)
     .show(ctx, |ui| {
-      ui.centered_and_justified(|ui| {
-        ui.label(RichText::new("GANASTE?\nPERDISTE?").family(egui::FontFamily::Name("CustomFont_1".into())).size(50.0))
-      })
+      match app.health.hero_health {
+        0.0 => {
+          ui.centered_and_justified(|ui| {
+            ui.label(RichText::new("PERDISTE").family(egui::FontFamily::Name("CustomFont_1".into())).size(50.0))
+          })
+        }
+        _ => {
+          ui.centered_and_justified(|ui| {
+            ui.label(RichText::new("GANASTE").family(egui::FontFamily::Name("CustomFont_1".into())).size(50.0))
+          })  
+        }
+      };
   });
   CentralPanel::default().show(ctx, |ui| {
     let lost_health = 1.0 - app.health.hero_health;
